@@ -8,7 +8,7 @@ Oscil       wave;
 void setup()
 {
   size(800, 600);
-  background(#000000);
+  background(#FFFFFF);
   
   minim = new Minim(this);
   out = minim.getLineOut();
@@ -22,7 +22,7 @@ void setup()
 void draw()
 {
   strokeWeight(5);
-  stroke(#FFFFFF);
+  stroke(#000000);
   if(mousePressed == true){
     if(mouseButton == RIGHT){
       background(0);
