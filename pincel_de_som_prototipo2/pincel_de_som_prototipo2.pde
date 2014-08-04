@@ -1,3 +1,5 @@
+import oscP5.*;
+import netP5.*;
 
 color BRANCO = #FFFFFF;
 color RED = #FF0000;
@@ -11,10 +13,18 @@ int circle_green = 500;
 int circle_blue = 550;
 int circleSize = 40;   // Diameter of circle
  
+ OscP5 oscP5;
+ NetAddress myRemoteLocation;
+ 
 void setup()
 {
   size(800, 600);
   background(BRANCO);
+  
+  // start oscP5, telling it to listen for incoming messages at port 5001 */
+  oscP5 = new OscP5(this,5001);
+  // set the remote location to be the localhost on port 5001
+  myRemoteLocation = new NetAddress("127.0.0.1",9001);
 }
  
 void draw(){
@@ -28,9 +38,17 @@ void draw(){
     }else{
       line(mouseX, mouseY, pmouseX, pmouseY);
       
+      // create an osc message
+      OscMessage myMessage = new OscMessage("/test");
+      
       // variaveis NAO USADAS POR ENQUANTO
-      float amp = map( mouseY, 0, height, 1, 0 ); //variacoes pelo eixo Y
-      float freq = map( mouseX, 0, width, 110, 880 ); //variacoes pelo eixo X
+      float amp = map( mouseY, 0, height, 0, 127 ); //variacoes pelo eixo Y
+      float freq = map( mouseX, 0, width, 0, 127 ); //variacoes pelo eixo X
+      
+     
+      myMessage.add(int(freq));
+      myMessage.add(int(amp));
+      oscP5.send(myMessage, myRemoteLocation);
     }    
   }
 }
