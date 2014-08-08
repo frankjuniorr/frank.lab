@@ -1,11 +1,11 @@
 import oscP5.*;
 import netP5.*;
 
-color BRANCO = #FFFFFF;
 color RED = #e82126;
 color GREEN = #00b87f;
 color BLUE = #3666de;
 color YELLOW = #ffc048;
+color BRANCO = #FFFFFF;
 color COR_PINCEL = YELLOW;
  
 int circleX = 40;
@@ -14,15 +14,17 @@ int circle_red = 450;
 int circle_green = 500;
 int circle_blue = 550;
 int circleSize = 40;   // Diameter of circle
+
+int ON = 50; // abaixo de 64, liga
+int OFF = 70; // acima de 64, desliga
+int efeito_amarelo = ON;
+int efeito_vermelho = OFF;
+int efeito_verde = OFF;
+int efeito_azul = OFF;
+String efeito = "amarelo";
  
- boolean efeito_amarelo = true;
- boolean efeito_vermelho = false;
- boolean efeito_verde = false;
- boolean efeito_azul = false;
- String efeito = "amarelo";
- 
- OscP5 oscP5;
- NetAddress myRemoteLocation;
+OscP5 oscP5;
+NetAddress myRemoteLocation;
  
 void setup()
 {
@@ -33,6 +35,8 @@ void setup()
   oscP5 = new OscP5(this,9001);
   // set the remote location to be the localhost on port 5001
   myRemoteLocation = new NetAddress("127.0.0.1",9001);
+  
+  efeitoOnOFF(efeito_amarelo, efeito_vermelho, efeito_verde, efeito_azul);
 }
  
 void draw(){
@@ -80,43 +84,43 @@ void update(int x, int y) {
   if (overCircle(circleX, circle_yellow, circleSize) == true) {
     COR_PINCEL = YELLOW;
     efeito = "amarelo";
-    efeito_amarelo = true;
-    efeito_vermelho = false;
-    efeito_verde = false;
-    efeito_azul = false;
+    efeito_amarelo = ON;
+    efeito_vermelho = OFF;
+    efeito_verde = OFF;
+    efeito_azul = OFF;
     efeitoOnOFF(efeito_amarelo, efeito_vermelho, efeito_verde, efeito_azul);
   } else if (overCircle(circleX, circle_red, circleSize) == true) {
     COR_PINCEL = RED;
     efeito = "vermelho";
-    efeito_amarelo = false;
-    efeito_vermelho = true;
-    efeito_verde = false;
-    efeito_azul = false;
+    efeito_amarelo = OFF;
+    efeito_vermelho = ON;
+    efeito_verde = OFF;
+    efeito_azul = OFF;
     efeitoOnOFF(efeito_amarelo, efeito_vermelho, efeito_verde, efeito_azul);
   } else if (overCircle(circleX, circle_green, circleSize) == true) {
     COR_PINCEL = GREEN;
     efeito = "verde";
-    efeito_amarelo = false;
-    efeito_vermelho = false;
-    efeito_verde = true;
-    efeito_azul = false;
+    efeito_amarelo = OFF;
+    efeito_vermelho = OFF;
+    efeito_verde = ON;
+    efeito_azul = OFF;
     efeitoOnOFF(efeito_amarelo, efeito_vermelho, efeito_verde, efeito_azul);
   } else if (overCircle(circleX, circle_blue, circleSize) == true) {
     COR_PINCEL = BLUE;
     efeito = "azul";
-    efeito_amarelo = false;
-    efeito_vermelho = false;
-    efeito_verde = false;
-    efeito_azul = true;
+    efeito_amarelo = OFF;
+    efeito_vermelho = OFF;
+    efeito_verde = OFF;
+    efeito_azul = ON;
     efeitoOnOFF(efeito_amarelo, efeito_vermelho, efeito_verde, efeito_azul);
   }
 }
 
-void efeitoOnOFF(boolean efeito_amarelo, boolean efeito_vermelho, boolean efeito_verde, boolean efeito_azul){
-    oscP5.send(new OscMessage("/amarelo").add(int(efeito_amarelo)), myRemoteLocation);
-    oscP5.send(new OscMessage("/vermelho").add(int(efeito_vermelho)), myRemoteLocation);
-    oscP5.send(new OscMessage("/verde").add(int(efeito_verde)), myRemoteLocation);
-    oscP5.send(new OscMessage("/azul").add(int(efeito_azul)), myRemoteLocation);
+void efeitoOnOFF(int efeito_amarelo, int efeito_vermelho, int efeito_verde, int efeito_azul){
+    oscP5.send(new OscMessage("/amarelo").add(efeito_amarelo), myRemoteLocation);
+    oscP5.send(new OscMessage("/vermelho").add(efeito_vermelho), myRemoteLocation);
+    oscP5.send(new OscMessage("/verde").add(efeito_verde), myRemoteLocation);
+    oscP5.send(new OscMessage("/azul").add(efeito_azul), myRemoteLocation);
 }
 
 // metodo mutherfucker que verifica se o click foi na area do circulo
