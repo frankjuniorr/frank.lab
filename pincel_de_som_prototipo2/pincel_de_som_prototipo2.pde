@@ -1,5 +1,6 @@
 import oscP5.*;
 import netP5.*;
+import fullscreen.*;
 
 color RED = #e82126;
 color GREEN = #00b87f;
@@ -25,11 +26,14 @@ String efeito = "amarelo";
  
 OscP5 oscP5;
 NetAddress myRemoteLocation;
+FullScreen fs;
  
 void setup()
 {
   size(800, 600);
   background(BRANCO);
+  fs = new FullScreen(this);
+//  fs.enter();
   
   // start oscP5, telling it to listen for incoming messages at port 5001 */
   oscP5 = new OscP5(this,9001);
