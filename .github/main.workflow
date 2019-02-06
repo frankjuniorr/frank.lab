@@ -1,6 +1,6 @@
 workflow "Hello world" {
-  on = "issues"
   resolves = ["Hello World"]
+  on = "issue_comment"
 }
 
 action "Hello World" {
